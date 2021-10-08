@@ -1,0 +1,78 @@
+Solidity
+
+First Smart Contract (Simple Storage)
+
+
+Defining Version 
+
+We have to define version in order to make compiler ready for the type of contract we are writing.
+This is an evolving language right now so we have to specify which version we have written our code for.
+
+To specify Single version
+pragma  solidity 0.6.0;
+
+To specify a single number of version
+pragma solidity ^0.6.0;  //That means from 0.6.0 to 0.6.99
+
+To specify a range of versions
+pragma solidity >=0.6.0 <0.9.0; ////That means from 0.6.0 to 0.9.0 (not including 0.9.0).
+
+CONTRACT 
+
+We can make contracts
+contract SimpleStorage {
+	
+	uint256 damn = 5;
+	uint256 number;
+}
+
+Variable damn has value of 5 and type uint256. We must specify the type of variable in solidity before initializing it.
+
+In above example we just created a contract which has a variable 'number' which can store uint256 number value.
+By initializing this way we can assign its value later  
+
+All variables have a scope of the curly brackets they are confined in.
+
+BASIC TYPES
+
+uint256 :- This can store value upto 256 bits 0 to 255 bits integer but no negative value
+
+int256 :- This can store value upto 256 bits -128 to 128 bits integer including negative values.
+
+bool:- These variables can store values of TRUE and FALSE for logical outputs.
+
+string:- This is a string of text these can not perform any operations.
+
+address :- This includes address which can be accessed.
+
+bytes32 :- This can make bytes of data. It can be anything from bytes 2 to 32.
+
+FUNCTIONS 
+
+function store (uint256 requested_amount)public {
+	request = requested_amount;
+}
+
+this is a function which perform an action, in this specific case store a amount in request variable. 
+
+In this function we are taking input parameter requested-amount of type uint256. The scope of request variable will be local within this function.
+
+
+
+Final Contract 
+
+pragma solidity >=0.6.0 <0.9.0;
+
+contract SimpleStorage {
+	
+	uint256 public amount;
+	string public name;
+	address public destination;
+	
+	function request(uint256 amount_, string name_, address destination_) public{
+		amount = amount_;
+		name  = name_;
+		destination = destination_;
+	}
+	
+}
