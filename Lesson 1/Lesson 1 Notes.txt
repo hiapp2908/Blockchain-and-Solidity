@@ -2,6 +2,7 @@ Solidity
 
 ##First Smart Contract (Simple Storage)
 
+** SPDX License Identifier is Required mostly free contract opensource it to MIT licensce.
 
 **Defining Version 
 
@@ -120,7 +121,12 @@ The storage is of 2 types in solidity,
 
 (string in solidity is the special object which is an array of bytes that means it requires storage so for temprary storage we have to assign "memory" keyword with string type)
 
+**MAPPING 
 
+To find persons in an array we have to map key to the variable so we can find them later on.
+
+below defined array we can just say
+mapping(string => address)
 
 Final Contract 
 
