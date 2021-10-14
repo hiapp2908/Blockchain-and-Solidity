@@ -1,0 +1,60 @@
+## STORAGE FACTORY (Calling a contract from other contract)
+
+To make a contract that makes a new storage for different contracts. Hence the name storage factory. Essentially we are calling a contract from other contract.
+
+// Importing a contract
+
+import <path>;
+
+By this we can import a contract in another contract.
+
+You can also write 2 contact in a single file but if you want many files to use a single contract then it is reasinable to make a separate contract and import it in ither files.
+
+
+To create a storage we need a function which will create new storages.Eg :-
+
+function createSimpleStorageContract() public {
+	SimpleStorage simpleStorage = new SimpleStorage();
+}
+
+Now We can create new Simple storage contracts.
+
+** Array 
+
+It stores a same type of object. In solidity we can create dynamic as well as static arrays.
+
+SimpleStorage[] public simpleStorageArray;
+
+It creates an array that stores Many simple storage contracts made by the function.
+
+to add in the array we have to mention it in the function.
+
+function createSimpleStorageContract() public {
+	SimpleStorage simpleStorage = new SimpleStorage();
+	*#simpleStorageArray.push(simpleStorage);*#
+}
+
+After importing we can also use different functions of imported contract in our new file.
+
+function sfStore(uint256 _simpleStorageIndex,uint256 _simpleStorageNumber) public {
+	// You need address and ABI(Application Binary Interface) to interact with a contract.
+	SimpleStorage simpleStorage = SimpleStorage(address(simpleStorageArray[_simpleStorageIndex]));
+	SimpleStorage.store(_simpleStorageNumber);	
+}
+
+We can retrieve also 
+
+function sfGet(uint256 _simpleStorageIndex) public view returns(uint256) {
+	SimpleStorage simpleStorage = SimpleStorage(address(simpleStorageArray[_simpleStorageIndex]));
+	return simpleStorage.retrieve();
+}
+
+## Inheritence
+
+If we do it like this
+
+contract StorageFactory is SimpleStorage{}
+
+This makes Storage factory inherit all the functions and attributes from the SimpleStorge contracts.
+ 
+
