@@ -1,0 +1,98 @@
+In this Contract we are going to learn how to make a function which can accept payments.
+
+In order to do that we are going to make a fuction named fund
+
+function fund() public payble {
+	addressToAmountFunded[msg.sender] += msg.value
+	
+	// ETH to USD conversion
+	
+}
+
+By mentioning the payble here we are saying that this function makes payments.
+
+To get the amount that has been funded we neet to map the adress to the funded amount.
+
+mapping(address => uint256) public addressToAmountFunded;
+
+msg.sender and msg.values are keywords an a payable contracts
+
+msg.sender is the person who sends the fund and msg.value is the value which they sent.
+
+**There are few sub units of currencies in ethereum
+1. wei :- It is smallest denomination of ethereum it cannot be broken further. It is used in all the ethereum smart contracts. All the values in contract are displayed in wei. 1 wei= 10**(-18) ETH. 
+
+2. Kwei(babbage) :- It is simply be called as Kilo-wei. 1 Kwei = 10**3 wei = 10**(-15) ETH.
+
+3. Mwei(lovelace) :- It is Mega(Million) wei. 1 Mwei = 10**6 wei = 10**(-12) ETH.
+
+4. Gwei(shanon) :- It is Giga-wei. 1 Gwei = 10**9 wei = 10**(-9) ETH.
+
+5. Microether(szabo) :- Now as we approach the full ether count it is first step to that. 1 MicroETH = 10**12 wei = 10**(-6) ETH.
+
+6. Milliether(finney) :- 1 MiliETH = 10**15 wei = 10**(-3) ETH.
+
+7.Ether :- This is the unit of Ether. 1ETH = 10**18 wei.
+
+**Importing from NPM/Github:- It is similar to normal import statements. You just have to gove the address of the contract you want to imp ort. Eg:
+
+import "@chainlink/contracts/src/v0.6/interfaces/AggregatorV3Interface.sol";
+
+**Interfaces:- Interface contract start with interface keyword.
+They don't have completed functions they just have initiated function.
+
+Solidity doesn't natively understand how to interact with another contract. We have to  tell solidity wich functions to call from another contract.
+
+**ABI(Application Binary Interfaces):- It tells solidity and other languages how it can interact with another contract.
+Interfaces compile down to the ABI. It is necessary to interact with another contracts.
+
+**You need the address of the chainlink or any other data feed you want to access.
+
+
+** Tuples can be used to access multiple data from a function. Eg:
+
+function some_func() public returns returns (
+      uint80 roundId,
+      int256 answer,
+      uint256 startedAt,
+      uint256 updatedAt,
+      uint80 answeredInRound
+    );{}
+    
+    (uint80 roundId,
+      int256 answer,
+      uint256 startedAt,
+      uint256 updatedAt,
+      uint80 answeredInRound) = some_func();
+      
+It'll give all the returns according to that order in the return statement.
+
+We can implicitly convert or cast the integer values in solidity as long as doesn't conflict with the values.
+
+Eg:- int256 number = 100;
+
+uint256(number) gives same number with uint256.
+
+** Overflow is another problem in the solidity with integers.
+As we know uint8 holds upto 2^8 = 256 numbers,ie 0 to 255.
+If we initialize a number more than that it is going to give us error. 
+But what if it happens in arithmetic sums or products. In this case it will ovweflow and wrapped around the answer.Eg:
+
+uint8 250 + uint8(55) = uint8 49. This is overflow. Thats why you have to use int8,16.32... upto 256 correctly.
+
+** Require:- When we are needed to make a rule that must be satisfied to go forward with contract we can add a require statement which will check the truthyness of the statement.
+
+require(msg.value >= 10, "More Amount Required");
+
+**Revert :- If the condition is not fulfilled then we must revert back the transaction and unspent gas by this function.
+
+**This:- "this" is a keyword that gives the address of the function that calls it.
+
+**Balance:- balance gives the balance in the given address.
+
+** Constructor are the function that gets called as the contract gets deployed. As these functions are required to construct the contract. 
+
+** Modifier is used to change the behaviour of a contract in a declarative way.
+
+
+
