@@ -1,0 +1,117 @@
+We can create contracts and deploy it using solidity and Remix IDE. But for integrating our web3 code we need a programming language to automate and plug the files safely in our device.
+
+For connection web3 apps in python we have python modules.
+
+We will use py-solc-x to compile and execute our solidity contract in python script.
+
+We have to open the solidity contract in our python script and compile it to make it useable in python to deploy.
+
+First import compile_standard from solcx then compile the opened
+solidity file. 
+
+from solcx import compile_standard
+
+with open("Contract.sol", "r") as file:
+    contract_name = file.read()
+
+    # Compiling our solidity file
+    compiled_sol = compile_standard(
+        {
+            "language": "Solidity",
+            "sources": {"Contract.sol": {"content": contact_name}},
+            "settings": {
+                "outputSelection": {"*": {"*": ["abi", "metadata", "evm.bytecode", "evm.sourceMap"]}
+                                    }
+            }
+        },
+        solc_version="0.8.10"
+    )
+    
+Then we can use the compiled contract in our network. 
+
+We can output the abi and bytecodes that we will need in further operations. 
+
+    with open("compiled_sol.json", "w") as file_out:
+        json.dump(compiled_sol, file_out)
+
+    # Get Bytecode
+    bytecode = compiled_sol["contracts"]["SimpleStorage.sol"]["SimpleStorage"]["evm"]["bytecode"]["object"]
+
+    # Get ABI
+    abi = compiled_sol["contracts"]["SimpleStorage.sol"]["SimpleStorage"]["abi"]
+
+
+
+Then we will use web3 module to deploy and execute the compiled contract on the network of blockchain that we want.
+
+from web3 import Web3
+
+Firstly for that we have to connect it to the network
+
+# Connecting to the Network(Ganache in this case)
+ 
+    w3 = Web3(Web3.HTTPProvider("http://127.0.0.1:7545"))
+    chain_id = 1337
+    my_address = "0x1d21bCa5b0846Da37B2ef482A2c1745A3b230082"
+    private_key = os.environ.get("PRIVATE_KEY")
+
+After this we will set nonce value and create the contract within web3 module.
+
+# Creating Contract
+    SimpleStorage = w3.eth.contract(abi=abi, bytecode=bytecode)
+
+## Get latest transaction
+    nonce = w3.eth.getTransactionCount(my_address)
+    
+Then build a transaction to deploy the contract to the selected network.
+
+# Building Transaction
+    transaction = SimpleStorage.constructor().buildTransaction(
+        {
+            "chainId": chain_id,
+            "from": my_address,
+            "nonce": nonce
+        }
+    )
+    
+We can't use it unless we sign the transaction. A transaction must be signed to go through. We will have to sign it with our private key.Then we will send that tranaction to the network.
+
+# Sign a Transaction
+    signed_txn = w3.eth.account.sign_transaction(transaction, private_key=private_key)
+
+    # Send a Transaction
+    txn_hash = w3.eth.send_raw_transaction(signed_txn.rawTransaction)
+    txn_reciept = w3.eth.wait_for_transaction_receipt(txn_hash)
+
+Now that our contract is deployed we can work with it and even perform its functions. 
+
+There are 2 ways to perform functions in web3. 
+
+First is to call and just see the data we already have in our contract.
+
+# Working With Contract
+    # Contract Address
+    # Contract ABI
+
+    contract_deployed = w3.eth.contract(address=txn_reciept.contractAddress, abi=abi)
+
+    ## Call a function doesn't make a state change.
+    ## Transact makes a state change and requires gas.
+
+    print(contract_deployed.functions.retrieve().call())
+    
+Second is to change state in our blockchain. It is used when we have to transact or save something in our contract. For this we have to build transaction then run the function in the contract.
+
+store_transaction = simple_storage_address.functions.store(29).buildTransaction({
+        "chainId": chain_id, "from": my_address, "nonce": nonce + 1
+    })
+
+    signed_store_txn = w3.eth.account.sign_transaction(store_transaction, private_key=private_key)
+
+    store_txn_hash = w3.eth.send_raw_transaction(signed_store_txn.rawTransaction)
+    tx_reciept = w3.eth.wait_for_transaction_receipt(store_txn_hash)
+
+    print(simple_storage_address.functions.retrieve().call())
+
+
+
